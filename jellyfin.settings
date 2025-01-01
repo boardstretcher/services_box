@@ -1,0 +1,15 @@
+CONTAINER_NAME="container-jellyfin.container"
+QUADLET_DIR="/etc/containers/systemd"
+IMAGE_NAME="docker.io/jellyfin/jellyfin:latest"
+TIMEZONE="America/Detroit"
+VOLUMES=(
+    "/localDATA/jellyfin/config:/config:Z"
+    "/localDATA/jellyfin/cache:/cache:Z"
+    "/localDATA/jellyfin/media:/media:Z"
+)
+PORTS=(
+    "8096:8096/tcp"
+    "8920:8920/tcp"
+)
+CAPABILITIES=()
+REQUIRES_WEBPASSWORD=false
