@@ -85,7 +85,7 @@ for ENV in "${ENVIRONMENT[@]}"; do
 done
 
 for PORT in "${PORTS[@]}"; do
-    echo "Port=$PORT" >> "$QUADLET_DIR/$CONTAINER_NAME"
+    echo "PublishPort=$PORT" >> "$QUADLET_DIR/$CONTAINER_NAME"
 done
 
 for VOLUME in "${VOLUMES[@]}"; do
