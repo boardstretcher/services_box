@@ -2,6 +2,7 @@ CONTAINER_NAME="container-pihole.container"
 QUADLET_DIR="/etc/containers/systemd"
 IMAGE_NAME="docker.io/pihole/pihole:latest"
 TIMEZONE="America/Detroit"
+NETWORK="host"
 VOLUMES=(
     "/localDATA/pihole/etc-pihole:/etc/pihole:Z"
     "/localDATA/pihole/etc-dnsmasq.d:/etc/dnsmasq.d:Z"
@@ -11,6 +12,12 @@ PORTS=(
     "53:53/tcp"
     "53:53/udp"
     "80:80/tcp"
+    "443:443/tcp"
 )
-CAPABILITIES=("NET_ADMIN")
 REQUIRES_WEBPASSWORD=true
+CAPABILITY=NET_ADMIN
+ENVIRONMENT=(
+    "DNS1=1.1.1.1"
+    "DNS2=1.0.0.1"
+    "DNSMASQ_LISTENING=all"
+)

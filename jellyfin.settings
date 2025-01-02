@@ -2,6 +2,7 @@ CONTAINER_NAME="container-jellyfin.container"
 QUADLET_DIR="/etc/containers/systemd"
 IMAGE_NAME="docker.io/jellyfin/jellyfin:latest"
 TIMEZONE="America/Detroit"
+NETWORK="host"
 VOLUMES=(
     "/localDATA/jellyfin/config:/config:Z"
     "/localDATA/jellyfin/cache:/cache:Z"

@@ -84,9 +84,21 @@ for ENV in "${ENVIRONMENT[@]}"; do
     echo "Environment=$ENV" >> "$QUADLET_DIR/$CONTAINER_NAME"
 done
 
+for PORT in "${PORTS[@]}"; do
+    echo "Port=$PORT" >> "$QUADLET_DIR/$CONTAINER_NAME"
+done
+
 for VOLUME in "${VOLUMES[@]}"; do
     echo "Volume=$VOLUME" >> "$QUADLET_DIR/$CONTAINER_NAME"
 done
+
+if [ -n "$CAPABILITY" ]; then
+    echo "AddCapability=$CAPABILITY" >> "$QUADLET_DIR/$CONTAINER_NAME"
+fi
+
+if [ -n "$NETWORK" ]; then
+    echo "Network=$NETWORK" >> "$QUADLET_DIR/$CONTAINER_NAME"
+fi
 
 # Firewall command section
 echo -e "\033[0;35m[\033[1;33mStatus\033[0;35m]\033[0m Configuring firewall rules..."
@@ -113,10 +125,13 @@ echo -e "\033[0;35m[\033[1;33mStatus\033[0;35m]\033[0m Generating systemd servic
 echo -e "\033[0;35m[\033[1;33mStatus\033[0;35m]\033[0m Reloading systemd daemon..."
 systemctl daemon-reload || error_exit "Failed to reload systemd daemon."
 
+
 if [ "$ENABLE_NOW" == "true" ]; then
     echo -e "\033[0;35m[\033[1;33mStatus\033[0;35m]\033[0m Enabling and starting service..."
     SERVICE_NAME="$(echo $CONTAINER_NAME | cut -d'.' -f1).service"
     systemctl enable "$SERVICE_NAME" || error_exit "Failed to enable $SERVICE_NAME."
     systemctl start "$SERVICE_NAME" || error_exit "Failed to start $SERVICE_NAME."
+    timeout 30 tmux new-session \; split-window -v \; send-keys 'watch podman ps; echo WILL END IN 30 SECONDS' C-m \; select-pane -t 0 \; send-keys "journalctl -fu $SERVICE_NAME" C-m \; send-keys C-b D
+
 fi
 

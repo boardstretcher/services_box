@@ -3,6 +3,19 @@
 # Podman Cleanup Script
 # Completely removes all containers, volumes, images, networks, and storage.
 
+echo -e "\e[93m!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\e[0m"  # Bright yellow
+echo -e "\e[38;5;208mIM GOING TO DELETE EVERYTHING\e[0m"  # Orange
+echo ""
+echo -e "\e[91mI HOPE YOU KNOW WHAT YOU ARE DOING\e[0m"  # Bright red
+echo ""
+echo -e "\e[38;5;196mLAST CHANCE TO CTRL-C OUT OF THIS\e[0m"  # Deep red
+echo ""
+read -p $'\e[91mType DELETE IT ALL: \e[0m' deletion_imminent  # Bright red prompt
+if [ "$deletion_imminent" != "DELETE IT ALL" ]; then
+    echo -e "\e[93mAlrighty - come back when you grow a spine\e[0m"  # Yellow
+    exit 0
+fi
+
 # Function to display error and exit
 error_exit() {
     echo "Error: $1"
@@ -36,6 +49,7 @@ rm -rf ~/.local/share/containers/ || error_exit "Failed to delete ~/.local/share
 
 echo "Deleting systemd container units"
 rm -rf /etc/containers/containers* || error_exit "Failed to delete /etc/containers/containers*."
+rm -rf /etc/containers/systemd/containers* || error_exit "Failed to delete /etc/containers/systemd/containers*."
 rm -rf /etc/systemd/system/containers* || error_exit "Failed to delete /etc/systemd/system/containers*."
 
 echo "Verifying cleanup..."
